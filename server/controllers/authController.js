@@ -79,9 +79,3 @@ exports.login = async (req, res) => {
     res.status(500).json({ message: "Internal server error" });
   }
 };
-
-// Logout function to handle user logout
-exports.logout = (req, res) => {
-  res.status(200).json({ message: "User logged out successfully" });
-};
-// This code handles user authentication, including signup, login, and logout functionalities.
