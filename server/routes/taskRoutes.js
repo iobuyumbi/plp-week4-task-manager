@@ -6,6 +6,7 @@ const {
   getTaskById,
   updateTask,
   deleteTask,
+  toggleTask,
 } = require("../controllers/taskController");
 const { protect, authorize } = require("../middleware/auth");
 const router = express.Router();
@@ -24,6 +25,9 @@ router.get("/:id", protect, getTaskById);
 
 // Route for updating a specific task by ID
 router.put("/:id", protect, updateTask);
+
+// Route for toggling task completion status
+router.patch("/:id/toggle", protect, toggleTask);
 
 // Route for deleting a specific task by ID
 router.delete("/:id", protect, deleteTask);

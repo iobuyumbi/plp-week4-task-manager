@@ -1,5 +1,5 @@
 import { MoonIcon, SunIcon } from "@heroicons/react/24/solid";
-import { button } from "@components/ui/button";
+import { Button } from "../components/ui/button";
 import { useState, useEffect } from "react";
 
 export default function ThemeToggle() {

@@ -7,7 +7,7 @@ exports.createTask = async (req, res) => {
       ...req.body,
       owner: req.user.id,
     });
-    res.status(201).json({ message: "Task created successfully", task });
+    res.status(201).json(task);
   } catch (error) {
     res.status(500).json({ message: "Internal server error" });
   }
@@ -17,7 +17,7 @@ exports.createTask = async (req, res) => {
 exports.getTasks = async (req, res) => {
   try {
     const tasks = await Task.find({ owner: req.user.id });
-    res.status(200).json({ tasks });
+    res.status(200).json(tasks);
   } catch (error) {
     res.status(500).json({ message: "Internal server error" });
   }
@@ -27,7 +27,7 @@ exports.getTasks = async (req, res) => {
 exports.getAllTasks = async (req, res) => {
   try {
     const tasks = await Task.find().populate("owner", "email");
-    res.status(200).json({ tasks });
+    res.status(200).json(tasks);
   } catch (error) {
     res.status(500).json({ message: "Internal server error" });
   }
@@ -40,7 +40,7 @@ exports.getTaskById = async (req, res) => {
     if (!task) {
       return res.status(404).json({ message: "Task not found" });
     }
-    res.status(200).json({ task });
+    res.status(200).json(task);
   } catch (error) {
     res.status(500).json({ message: "Internal server error" });
   }
@@ -57,7 +57,29 @@ exports.updateTask = async (req, res) => {
     if (!task) {
       return res.status(404).json({ message: "Task not found" });
     }
-    res.status(200).json({ message: "Task updated successfully", task });
+    res.status(200).json(task);
+  } catch (error) {
+    res.status(500).json({ message: "Internal server error" });
+  }
+};
+
+// PATCH /api/tasks/:id/toggle
+exports.toggleTask = async (req, res) => {
+  try {
+    const task = await Task.findById(req.params.id);
+    if (!task) {
+      return res.status(404).json({ message: "Task not found" });
+    }
+
+    // Check if user owns the task
+    if (task.owner.toString() !== req.user.id) {
+      return res.status(403).json({ message: "Not authorized" });
+    }
+
+    task.completed = !task.completed;
+    await task.save();
+
+    res.status(200).json({ completed: task.completed });
   } catch (error) {
     res.status(500).json({ message: "Internal server error" });
   }

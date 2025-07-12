@@ -36,9 +36,11 @@ export default function Dashboard() {
 
   const handleTaskUpdate = async (updatedTask) => {
     try {
-      const response = await API.put(`/tasks/${updatedTask.id}`, updatedTask);
+      const response = await API.put(`/tasks/${updatedTask._id}`, updatedTask);
       setTasks((prev) =>
-        prev.map((task) => (task.id === updatedTask.id ? response.data : task))
+        prev.map((task) =>
+          task._id === updatedTask._id ? response.data : task
+        )
       );
       toast.success("Task updated successfully ✅");
     } catch (error) {
@@ -51,7 +53,7 @@ export default function Dashboard() {
       const response = await API.patch(`/tasks/${taskId}/toggle`);
       setTasks((prev) =>
         prev.map((task) =>
-          task.id === taskId
+          task._id === taskId
             ? { ...task, completed: response.data.completed }
             : task
         )
@@ -64,7 +66,7 @@ export default function Dashboard() {
   const handleTaskDelete = async (taskId) => {
     try {
       await API.delete(`/tasks/${taskId}`);
-      setTasks((prev) => prev.filter((task) => task.id !== taskId));
+      setTasks((prev) => prev.filter((task) => task._id !== taskId));
       toast.success("Task deleted successfully ✅");
     } catch (error) {
       toast.error("Failed to delete task ❌");
@@ -85,10 +87,10 @@ export default function Dashboard() {
         ) : (
           tasks.map((task) => (
             <TaskCard
-              key={task.id}
+              key={task._id}
               task={task}
-              onToggle={() => handleTaskToggle(task.id)}
-              onDelete={() => handleTaskDelete(task.id)}
+              onToggle={() => handleTaskToggle(task._id)}
+              onDelete={() => handleTaskDelete(task._id)}
               onUpdate={handleTaskUpdate} // passed once, used inside TaskCard
             />
           ))

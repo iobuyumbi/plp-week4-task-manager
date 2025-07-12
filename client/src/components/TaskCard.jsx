@@ -4,8 +4,8 @@ import {
   CardFooter,
   CardTitle,
   CardContent,
-} from "@components/ui/card";
-import { Button } from "@components/ui/button";
+} from "../components/ui/card";
+import { Button } from "../components/ui/button";
 import {
   CheckCircleIcon,
   TrashIcon,
@@ -38,7 +38,7 @@ export default function TaskCard({ task, onDelete, onToggle, onUpdate }) {
         <Button
           variant={task.completed ? "outline" : "secondary"}
           size="icon"
-          onClick={() => onToggle(task.id)}
+          onClick={() => onToggle(task._id)}
         >
           <CheckCircleIcon className="h-5 w-5" />
         </Button>
@@ -50,7 +50,7 @@ export default function TaskCard({ task, onDelete, onToggle, onUpdate }) {
         <Button
           variant="destructive"
           size="icon"
-          onClick={() => onDelete(task.id)}
+          onClick={() => onDelete(task._id)}
         >
           <TrashIcon className="h-5 w-5" />
         </Button>

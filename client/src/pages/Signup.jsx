@@ -1,15 +1,16 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
+import { Button } from "../components/ui/button";
+import { Input } from "../components/ui/input";
 import {
   Card,
   CardContent,
   CardFooter,
   CardHeader,
   CardTitle,
-} from "@/components/ui/card";
-import API from "@/api"; // Adjust if your API import path differs
+} from "../components/ui/card";
+import API from "../services/api";
+import { toast } from "sonner";
 
 export default function Signup() {
   const [name, setName] = useState("");
@@ -20,6 +21,11 @@ export default function Signup() {
 
   const handleSignup = async (e) => {
     e.preventDefault();
+    if (!name || !email || !password) {
+      toast.error("Please fill in all fields");
+      return;
+    }
+
     setLoading(true);
     try {
       const response = await API.post("/auth/signup", {
@@ -28,19 +34,21 @@ export default function Signup() {
         password,
       });
       localStorage.setItem("token", response.data.token);
+      toast.success("Account created successfully ✅");
       navigate("/dashboard");
     } catch (error) {
       console.error("Signup failed:", error);
-      alert("Signup failed. Please try again.");
+      toast.error("Signup failed ❌. Try a different email.");
+    } finally {
+      setLoading(false);
     }
-    setLoading(false);
   };
 
   return (
-    <div className="flex justify-center items-center min-h-screen bg-gray-100 dark:bg-gray-900">
-      <Card className="w-full max-w-md">
+    <div className="flex justify-center items-center min-h-screen bg-gray-100 dark:bg-gray-900 p-4">
+      <Card className="w-full max-w-md shadow-md">
         <CardHeader>
-          <CardTitle className="text-center">Create an Account</CardTitle>
+          <CardTitle className="text-center text-xl">Create an Account</CardTitle>
         </CardHeader>
         <form onSubmit={handleSignup}>
           <CardContent className="space-y-4">
@@ -49,6 +57,7 @@ export default function Signup() {
               placeholder="Full Name"
               value={name}
               onChange={(e) => setName(e.target.value)}
+              disabled={loading}
               required
             />
             <Input
@@ -56,6 +65,7 @@ export default function Signup() {
               placeholder="Email Address"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
+              disabled={loading}
               required
             />
             <Input
@@ -63,16 +73,28 @@ export default function Signup() {
               placeholder="Password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
+              disabled={loading}
               required
             />
           </CardContent>
-          <CardFooter className="flex justify-between items-center">
-            <Button type="submit" variant="primary" disabled={loading}>
+          <CardFooter className="flex flex-col gap-3 items-center mt-4">
+            <Button
+              type="submit"
+              className="w-full bg-gray-300 text-gray-800 hover:bg-gray-400"
+              disabled={loading}
+            >
               {loading ? "Creating Account..." : "Sign Up"}
             </Button>
-            <Button variant="link" onClick={() => navigate("/login")}>
-              Already have an account?
-            </Button>
+            <p className="text-sm text-gray-600 dark:text-gray-300">
+              Already have an account?{" "}
+              <button
+                type="button"
+                onClick={() => navigate("/login")}
+                className="text-blue-600 hover:underline"
+              >
+                Log in
+              </button>
+            </p>
           </CardFooter>
         </form>
       </Card>

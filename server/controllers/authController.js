@@ -35,8 +35,8 @@ exports.signup = async (req, res) => {
       }
     );
 
-    // Return the token and user information
-    res.status(201).json({ token, user: { id: newUser._id, name, email } });
+    // Return the token
+    res.status(201).json({ token });
   } catch (error) {
     console.error("Error during signup:", error);
     res.status(500).json({ message: "Internal server error" });
@@ -69,11 +69,8 @@ exports.login = async (req, res) => {
       }
     );
 
-    // Return the token and user information
-    res.status(200).json({
-      token,
-      user: { id: user._id, name: user.name, email: user.email },
-    });
+    // Return the token
+    res.status(200).json({ token });
   } catch (error) {
     console.error("Error during login:", error);
     res.status(500).json({ message: "Internal server error" });

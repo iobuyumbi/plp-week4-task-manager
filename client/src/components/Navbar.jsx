@@ -1,12 +1,13 @@
 import { Link } from "react-router-dom";
 import ThemeToggle from "./ThemeToggle";
-import { button } from "@components/ui/button";
+import { Button } from "../components/ui/button";
 import {
   DropdownMenu,
   DropdownMenuItem,
   DropdownMenuContent,
+
   DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
+} from "../components/ui/dropdown-menu";
 import { UserCircleIcon } from "@heroicons/react/24/solid";
 
 export default function Navbar() {
