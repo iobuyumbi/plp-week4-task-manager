@@ -3,7 +3,7 @@ import axios from "axios";
 // Set your API base URL in .env as VITE_API_URL, e.g. http://localhost:5 000/api
 const API_URL = import.meta.env.VITE_API_URL || "http://localhost:5000/api";
 
-const api = axios.create({
+const API = axios.create({
   baseURL: API_URL,
   headers: {
     "Content-Type": "application/json",
@@ -11,7 +11,7 @@ const api = axios.create({
 });
 
 // Attach JWT token to every request if available
-api.interceptors.request.use(
+API.interceptors.request.use(
   (config) => {
     const token = localStorage.getItem("token");
     if (token) {
@@ -22,4 +22,4 @@ api.interceptors.request.use(
   (error) => Promise.reject(error)
 );
 
-export default api;
+export default API;

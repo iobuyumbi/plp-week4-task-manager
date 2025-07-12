@@ -6,9 +6,14 @@ import {
   CardContent,
 } from "@components/ui/card";
 import { Button } from "@components/ui/button";
-import { CheckCircleIcon, TrashIcon } from "@heroicons/react/24/solid";
+import {
+  CheckCircleIcon,
+  TrashIcon,
+  PencilSquareIcon,
+} from "@heroicons/react/24/solid";
+import TaskDialog from "./TaskDialog"; // embedded edit dialog
 
-export default function TaskCard({ task, onDelete, onToggle }) {
+export default function TaskCard({ task, onDelete, onToggle, onUpdate }) {
   return (
     <Card
       className={`relative animation fade ${
@@ -36,15 +41,18 @@ export default function TaskCard({ task, onDelete, onToggle }) {
           onClick={() => onToggle(task.id)}
         >
           <CheckCircleIcon className="h-5 w-5" />
-          Complete
         </Button>
+        <TaskDialog
+          task={task}
+          triggerLabel={<PencilSquareIcon className="h-5 w-5" />}
+          onSubmit={onUpdate}
+        />
         <Button
           variant="destructive"
           size="icon"
           onClick={() => onDelete(task.id)}
         >
           <TrashIcon className="h-5 w-5" />
-          Delete
         </Button>
       </CardFooter>
     </Card>
