@@ -5,7 +5,6 @@ import {
   DropdownMenu,
   DropdownMenuItem,
   DropdownMenuContent,
-
   DropdownMenuTrigger,
 } from "../components/ui/dropdown-menu";
 import { UserCircleIcon } from "@heroicons/react/24/solid";
@@ -25,9 +24,9 @@ export default function Navbar() {
         <ThemeToggle />
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
-            <button className={button({ variant: "ghost", size: "icon" })}>
+            <Button variant="ghost" size="icon">
               <UserCircleIcon className="h-6 w-6 text-gray-500 dark:text-gray-300" />
-            </button>
+            </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end" className="w-44">
             <DropdownMenuItem onClick={logout}>logout</DropdownMenuItem>

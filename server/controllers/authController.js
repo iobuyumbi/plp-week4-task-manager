@@ -7,6 +7,8 @@ exports.signup = async (req, res) => {
   const { name, email, password } = req.body;
 
   try {
+    console.log("Signup attempt for:", email);
+
     // Check if user already exists
     const existingUser = await User.findOne({ email });
     if (existingUser) {
@@ -25,16 +27,22 @@ exports.signup = async (req, res) => {
 
     // Save the user to the database
     await newUser.save();
+    console.log("User created:", {
+      _id: newUser._id,
+      email: newUser.email,
+      role: newUser.role,
+    });
 
     // Generate a JWT token
-    const token = jwt.sign(
-      { id: newUser._id, role: newUser.role },
-      process.env.JWT_SECRET,
-      {
-        expiresIn: "1h",
-      }
-    );
+    const tokenPayload = { id: newUser._id, role: newUser.role };
+    console.log("JWT payload:", tokenPayload);
+    console.log("JWT_SECRET present:", !!process.env.JWT_SECRET);
 
+    const token = jwt.sign(tokenPayload, process.env.JWT_SECRET, {
+      expiresIn: "1h",
+    });
+
+    console.log("Token generated successfully");
     // Return the token
     res.status(201).json({ token });
   } catch (error) {

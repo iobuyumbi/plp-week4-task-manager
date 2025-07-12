@@ -2,6 +2,7 @@ import {
   Dialog,
   DialogClose,
   DialogContent,
+  DialogDescription,
   DialogFooter,
   DialogHeader,
   DialogTitle,
@@ -19,6 +20,7 @@ export default function TaskDialog({
 }) {
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
+  const [open, setOpen] = useState(false);
 
   // Autofill form if task is passed (edit mode)
   useEffect(() => {
@@ -42,16 +44,33 @@ export default function TaskDialog({
       : { title, description }; // creating
 
     onSubmit(payload);
+    setOpen(false); // Close dialog after submission
+  };
+
+  const handleOpenChange = (newOpen) => {
+    setOpen(newOpen);
+    if (!newOpen) {
+      // Reset form when dialog closes
+      if (!task) {
+        setTitle("");
+        setDescription("");
+      }
+    }
   };
 
   return (
-    <Dialog>
+    <Dialog open={open} onOpenChange={handleOpenChange}>
       <DialogTrigger asChild>
         <Button variant="primary">{triggerLabel}</Button>
       </DialogTrigger>
       <DialogContent>
         <DialogHeader>
           <DialogTitle>{task ? "Edit Task" : "New Task"}</DialogTitle>
+          <DialogDescription>
+            {task
+              ? "Update the details of your task below."
+              : "Create a new task by filling in the details below."}
+          </DialogDescription>
         </DialogHeader>
         <div className="space-y-4">
           <Input
@@ -72,11 +91,9 @@ export default function TaskDialog({
           <DialogClose asChild>
             <Button variant="outline">Cancel</Button>
           </DialogClose>
-          <DialogClose asChild>
-            <Button variant="primary" onClick={handleSubmit}>
-              {task ? "Update Task" : "Create Task"}
-            </Button>
-          </DialogClose>
+          <Button variant="primary" onClick={handleSubmit}>
+            {task ? "Update Task" : "Create Task"}
+          </Button>
         </DialogFooter>
       </DialogContent>
     </Dialog>

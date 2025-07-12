@@ -13,9 +13,16 @@ export default function Dashboard() {
   useEffect(() => {
     const load = async () => {
       try {
+        console.log("Fetching tasks...");
+        const token = localStorage.getItem("token");
+        console.log("Token:", token ? "Present" : "Missing");
+
         const response = await API.get("/tasks");
+        console.log("Tasks response:", response.data);
         setTasks(response.data);
       } catch (error) {
+        console.error("Error fetching tasks:", error);
+        console.error("Error response:", error.response?.data);
         toast.error("Failed to fetch tasks");
       } finally {
         setLoading(false);
@@ -26,10 +33,13 @@ export default function Dashboard() {
 
   const handleTaskCreate = async (payload) => {
     try {
+      console.log("Creating task:", payload);
       const response = await API.post("/tasks", payload);
+      console.log("Create response:", response.data);
       setTasks((prev) => [...prev, response.data]);
       toast.success("Task created successfully ✅");
     } catch (error) {
+      console.error("Error creating task:", error);
       toast.error("Failed to create task ❌");
     }
   };
@@ -83,7 +93,12 @@ export default function Dashboard() {
             Loading tasks...
           </p>
         ) : tasks.length === 0 ? (
-          <p className="text-center text-zinc-400">No tasks found.</p>
+          <div className="text-center">
+            <p className="text-zinc-400 mb-4">No tasks found.</p>
+            <p className="text-sm text-zinc-500">
+              Create your first task using the button above!
+            </p>
+          </div>
         ) : (
           tasks.map((task) => (
             <TaskCard

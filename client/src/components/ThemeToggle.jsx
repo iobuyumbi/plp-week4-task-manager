@@ -27,17 +27,17 @@ export default function ThemeToggle() {
   }, [dark]);
 
   return (
-    <button
-      type="button"
+    <Button
+      variant="ghost"
+      size="icon"
       aria-label="Toggle theme"
       onClick={() => setDark(!dark)}
-      className={button({ variant: "ghost", size: "icon" })}
     >
       {dark ? (
         <SunIcon className="h-5 w-5" />
       ) : (
         <MoonIcon className="h-5 w-5" />
       )}
-    </button>
+    </Button>
   );
 }

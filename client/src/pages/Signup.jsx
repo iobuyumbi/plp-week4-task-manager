@@ -28,16 +28,20 @@ export default function Signup() {
 
     setLoading(true);
     try {
+      console.log("Signing up with:", { name, email });
       const response = await API.post("/auth/signup", {
         name,
         email,
         password,
       });
+      console.log("Signup response:", response.data);
       localStorage.setItem("token", response.data.token);
+      console.log("Token stored:", response.data.token ? "Yes" : "No");
       toast.success("Account created successfully ✅");
       navigate("/dashboard");
     } catch (error) {
       console.error("Signup failed:", error);
+      console.error("Error response:", error.response?.data);
       toast.error("Signup failed ❌. Try a different email.");
     } finally {
       setLoading(false);
@@ -48,7 +52,9 @@ export default function Signup() {
     <div className="flex justify-center items-center min-h-screen bg-gray-100 dark:bg-gray-900 p-4">
       <Card className="w-full max-w-md shadow-md">
         <CardHeader>
-          <CardTitle className="text-center text-xl">Create an Account</CardTitle>
+          <CardTitle className="text-center text-xl">
+            Create an Account
+          </CardTitle>
         </CardHeader>
         <form onSubmit={handleSignup}>
           <CardContent className="space-y-4">

@@ -5,7 +5,7 @@ exports.createTask = async (req, res) => {
   try {
     const task = await Task.create({
       ...req.body,
-      owner: req.user.id,
+      owner: req.user._id,
     });
     res.status(201).json(task);
   } catch (error) {
@@ -16,7 +16,7 @@ exports.createTask = async (req, res) => {
 // GET /api/tasks
 exports.getTasks = async (req, res) => {
   try {
-    const tasks = await Task.find({ owner: req.user.id });
+    const tasks = await Task.find({ owner: req.user._id });
     res.status(200).json(tasks);
   } catch (error) {
     res.status(500).json({ message: "Internal server error" });
@@ -72,7 +72,7 @@ exports.toggleTask = async (req, res) => {
     }
 
     // Check if user owns the task
-    if (task.owner.toString() !== req.user.id) {
+    if (task.owner.toString() !== req.user._id.toString()) {
       return res.status(403).json({ message: "Not authorized" });
     }
 
